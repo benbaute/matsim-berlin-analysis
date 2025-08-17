@@ -7,9 +7,10 @@ from shapely.geometry import MultiPoint
 base_path = "../matsim-berlin/output/network/"
 nodes_gdf = gpd.read_file(f"{base_path}bike/bike-nodes.geojson")
 links_gdf = gpd.read_file(f"{base_path}bike/bike-links.geojson")
+links_gdf["length"] = pd.to_numeric(links_gdf["length"])
 links_lookup = {}
 for _, d in links_gdf.iterrows():
-    links_lookup[d["id"]] = {"fromID": d["fromID"], "toID": d["toID"], "geometry": d["geometry"]}
+    links_lookup[d["id"]] = {"fromID": d["fromID"], "toID": d["toID"], "length": d["length"], "geometry": d["geometry"]}
 intersection_gdf = gpd.read_file(f"{base_path}qgis-output/bike-network-intersections.geojson")
 
 intersection_node_ids = []
@@ -74,13 +75,17 @@ for _, intersection in intersection_gdf.iterrows():
         if from_point.distance(part_b) < from_point.distance(part_a):
             part_a, part_b = part_b, part_a
 
+        length_complete_link = to_be_deleted_link["length"] if (
+                "length" in to_be_deleted_link) else to_be_deleted_link["euclideanDistance"]
+        part_a_length = part_a.length / (part_a.length + part_b.length) * length_complete_link
+        part_b_length = part_b.length / (part_a.length + part_b.length) * length_complete_link
         first_link = {
             "id": f"link_{len(link_array)}1_{link_id}",
             "fromID": to_be_deleted_link["fromID"],
             "toID": new_node_id,
             "geometry": part_a,
             "originalLinkID": link_id,
-            "euclideanDistance": part_a.length
+            "euclideanDistance": part_a_length
         }
         second_link = {
             "id": f"link_{len(link_array)}2_{link_id}",
@@ -88,7 +93,7 @@ for _, intersection in intersection_gdf.iterrows():
             "toID": to_be_deleted_link["toID"],
             "geometry": part_b,
             "originalLinkID": link_id,
-            "euclideanDistance": part_b.length
+            "euclideanDistance": part_b_length
         }
         new_matsim_links.append(first_link)
         new_matsim_links.append(second_link)
