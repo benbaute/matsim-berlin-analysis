@@ -31,7 +31,7 @@ for f in filtered:
 
 # Draw network in gray
 for _, row in network.iterrows():
-    if row["id"].find("link_") == 0:
+    if "link_RSV" in row["id"]:
         for f in filtered:
             for m in f["maps"]:
                 folium.GeoJson(row["geometry"], style_function=lambda x: {"color": "green", "weight": 7}).add_to(m)
