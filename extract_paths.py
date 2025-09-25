@@ -6,7 +6,7 @@ import geopandas as gpd
 import pandas as pd
 from shapely import LineString
 
-version = "03"
+version = "07"
 base_path = f"../matsim-berlin/output/berlin-v6.4-1pct-{version}/"
 file_path = base_path + "berlin-v6.4.output_plans.xml.gz"
 output_file = "output/bike_routes.geojson"
@@ -24,7 +24,10 @@ with gzip.open(file_path, 'rt', encoding='utf-8') as f:
     tree = ET.parse(f)
     root = tree.getroot()
 
-    for person in root.findall('person'):
+    all_persons = root.findall('person')
+    number_of_persons = len(all_persons)
+    for p_number, person in enumerate(all_persons):
+        print(f"\r{p_number}/{number_of_persons}", end="")
         person_id = person.attrib['id']
         for plan in person.findall('plan'):
             selected = plan.attrib.get('selected', 'no')
@@ -57,6 +60,6 @@ with gzip.open(file_path, 'rt', encoding='utf-8') as f:
                                 "length": rsv_length + non_rsv_length,
                                 "rsv_usage": rsv_length / (rsv_length+non_rsv_length) * 100
                             })
-
+print("")
 plans_gdf = gpd.GeoDataFrame(rows, crs=network.crs)
 plans_gdf.to_file(Path(output_file))

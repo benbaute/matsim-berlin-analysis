@@ -8,6 +8,7 @@ from shapely import LineString
 network = gpd.read_file("../matsim-berlin/output/network/cycle-highway-network/bike-links.geojson")
 network = network.to_crs(epsg=4326)
 plans_gdf = gpd.read_file("output/bike_routes.geojson")
+plans_gdf = plans_gdf[plans_gdf["plan_selected"] == "yes"]
 plans_gdf["length"] = round(plans_gdf["length"], 2)
 plans_gdf["rsv_usage"] = round(plans_gdf["rsv_usage"], 2)
 

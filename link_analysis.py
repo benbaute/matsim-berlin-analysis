@@ -6,7 +6,7 @@ from matplotlib import cm, colors
 import matplotlib.pyplot as plt
 from shapely import wkt
 
-version = "62"
+version = "56"
 base_path = f"../matsim-berlin/output/berlin-v6.4-1pct-{version}/"
 file_path = base_path + "berlin-v6.4.output_links.csv.gz"
 output_file = "output/bike_routes.geojson"
@@ -39,7 +39,7 @@ for i in range(100):
 cmap = cm.inferno
 norm = colors.Normalize(vmin=0, vmax=links_gdf["vol_bike"].max())
 
-threshold = 0.025 * links_gdf["vol_bike"].max()
+threshold = 0  # 0.025 * links_gdf["vol_bike"].max()  # Use this for smooth interactive map.
 above_threshold_gdf = links_gdf[links_gdf['vol_bike'] > threshold]
 print(f"Number of bike links with volume > {threshold}: {len(above_threshold_gdf)}")
 
@@ -64,7 +64,7 @@ folium.GeoJson(data=above_threshold_gdf,
 m.save(f"output/heat_map-{version}.html")
 
 berlin_bbox = (13.11, 52.4, 13.63, 52.64)
-links_berlin = links_gdf.cx[berlin_bbox[0]:berlin_bbox[2], berlin_bbox[1]:berlin_bbox[3]]
+links_berlin = above_threshold_gdf.cx[berlin_bbox[0]:berlin_bbox[2], berlin_bbox[1]:berlin_bbox[3]]
 
 fig, ax = plt.subplots(figsize=(11, 6))
 rsv_links.plot(color="green", linewidth=5.0, ax=ax)

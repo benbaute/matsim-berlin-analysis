@@ -36,3 +36,28 @@ To create the network file on your own. Follow the following steps:
 
 ## Analysis
 
+* The file [Explore Network](explore_network.py) creates an interactive map of the network creation results.
+  The [html](output/map.html) file can be opened in any browser.
+  It visualizes the new cycle highway links, intersection with the available Matsim network,
+  new intersections, and the split links.
+
+* The file [Explore Plans](explore_plans.py) displays the plans chosen by the cyclists.
+  It was used for debugging purposes to see whether appropriate routes were chosen.
+  It uses the filtered data of the file [Extract Paths](extract_paths.py).
+  This works fine with a small population.
+  With a big population the plans file is bigger than 1GB which is too big for Python to easily handle.
+  In that case the file would have to be read in, in parts.
+
+* The file [Link Analysis](link_analysis.py) creates a heatmap for a run 
+  depending on how many bikes used a particular link.
+  The map is created as both an image and as an interactive map.
+  The interactive map can only handle a certain amount of links while working smoothly. 
+  The links can be filtered accordingly.
+
+## Screenshots
+
+![Interactive Map](images/screenshot_map.png)
+
+![Plans](images/screenshot_plans.png)
+
+![Heatmap](images/heat_map-5.6.png)
