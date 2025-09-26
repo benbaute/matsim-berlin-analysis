@@ -5,7 +5,7 @@ The JAVA-code can be found [here](https://github.com/benbaute/matsim-berlin).
 
 ## Creating a network file with cycle-highways
 
-The creation can be skipped by downloading the [network file with cycle-highways](https://tubcloud.tu-berlin.de/s/pjHerAx8pbtEqnb).
+The creation can be skipped by downloading the [network file with cycle-highways](https://tubcloud.tu-berlin.de/s/2FkQE9FsDWRmP5s).
 To create the network file on your own. Follow the following steps:
 
 1. Download the [network file](https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/berlin/berlin-v6.4/input/berlin-v6.4-network-with-pt.xml.gz) and put it in the [input v6.4 folder](https://github.com/benbaute/matsim-berlin/tree/main/input/v6.4) on your machine.
